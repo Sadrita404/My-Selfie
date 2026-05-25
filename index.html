@@ -107,6 +107,27 @@ video {
     transform: scaleX(-1);
 }
 
+.peripheral-blocker {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(19, 28, 46, 0.96);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.peripheral-blocker p {
+    color: #a3b8cc;
+    font-size: 0.9rem;
+    max-width: 380px;
+    line-height: 1.5;
+    text-align: center;
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -148,6 +169,81 @@ video {
     border-bottom-color: #0369a1;
 }
 
+.properties-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.panel-block {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--fx-radius);
+    padding: 1rem;
+}
+
+.panel-section-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.vertical-action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vertical-action-group .btn {
+    width: 100%;
+}
+
+footer {
+    width: 100%;
+    background-color: var(--panel-bg);
+    border-top: 2px solid var(--border-subtle);
+    padding: 0.65rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
 </style>
+</head>
+<body>
+    
+<header>
+    <div class="brand-wrapper">
+        <div class="brand-logo">My Selfie <span>Workspace</span></div>
+    </div>
+</header>
+
+<div class="app-container">
+    <div class="viewport-workspace">
+        <div class="media-stage">
+            <video id="vid" playsinline autoplay muted></video>
+            <div class="peripheral-blocker" id="blocker-overlay"></div>
+                <p>Initialize camera hardware device link to route the media stream to the viewport architecture modules.</p>
+                <button class="btn-primary" onclick="startHardwareStream()">Initialize Stream</button>
+        </div>
+    </div>
+</div>
+
+<div class="properties-sidebar">
+    <div class="panel-block">
+        <div class="panel-section-title">Execution Blocks</div>
+        <div class="vertical-action-group">
+            <button class="btn danger" id="action-disconnect" onclick="KillHardwareStream()" style="display: :none;">Terminate Stream Link</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<footer>
+    By Sadrita Neogi
+</footer>
+
+</body>
 </head>    
 </html>
