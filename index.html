@@ -244,6 +244,34 @@ footer {
     By Sadrita Neogi
 </footer>
 
-</body>
-</head>    
+<script>
+    const vid = document.getElementById('vid');
+    const blockerOverlay = document.getElementById('blocker-overlay');
+    const btnDisconnect = document.getElementById('action-disconnect');
+
+    async function startHardwareStream() {
+        try {
+            const streamObject = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+                audio: false
+            });
+            vid.srcObject = streamObject;
+            await new Promise(resolve => { vid.onloadedmetadata = resolve; });
+            vid.play();
+            blockerOverlay.style.display = 'none';
+            btnDisconnect.style.display = 'inline-flex'
+        } catch (eer) {
+            alert('Camera access denied');
+        }
+    }
+
+    function killHardwareStream() {
+        if (vid.srcObject) {
+            vid.srcObject.getTracks().forEach(track => track.stop());
+        }
+        blockerOverlay.style.display = 'flex';
+        btnDisconnect.style.display = 'none';
+    }
+</script>
+</body>  
 </html>
