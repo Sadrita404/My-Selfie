@@ -42,7 +42,111 @@ body {
     flex-direction: column;
 }
 
+header {
+    width: 100%;
+    background-color: var(--panel-bg);
+    border-bottom: 2px solid var(--border-subtle);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
 
+.brand-logo {
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -0.03em;
+}
+
+.brand-logo span {
+    color: var(--brand-primary);
+    font-weight: 400;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.viewport-workspace {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--fx-radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+}
+
+.media-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: var(--canvas-bg);
+    border-radius: var(--fx-radius-sm);
+    overflow: hidden;
+    border: 2px solid #090d16;
+}
+
+video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #2c3e59, #1e293b);
+    color: var(--text-main);
+    border: 1px solid #3d567d;
+    border-bottom: 3px solid #16202e;
+    border-radius: var(--fx-radius-sm);
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
+    text-shadow: var(--btn-text-shadow);
+}
+
+.btn:hover {
+    filter: brightness(1.15);
+}
+
+.btn:active {
+    transform: translate();
+    border-bottom-width: 1px;
+    box-shadow: var(--btn-shadow-active);
+}
+
+.btn.primary {
+    background: linear-gradient(to bottom, #385bdf8, #0284c7);
+    color: #040811;
+    border-color: #7dd3fc;
+    border-bottom-color: #0369a1;
+}
+
+.btn.danger {
+    background: linear-gradient(to bottom, #f43f5e, #be123c);
+    border-color: #fb7185;
+    border-bottom-color: #0369a1;
+}
 
 </style>
 </head>    
