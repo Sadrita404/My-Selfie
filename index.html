@@ -86,6 +86,8 @@ header {
     border-radius: 50%;
     background-color: var(--text-muted);
 }
+.status-dot.active { background-color: #10b981;}
+
 .app-container {
     width: 100%;
     max-width: 1600px;
@@ -120,13 +122,35 @@ header {
     border: 2px solid #090d16;
 }
 
-video {
+video , canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scaleX(-1);
+}
+
+video { transform: scaleX(-1); }
+#cvs { transform: scaleX(-1); z-index: 2;}
+
+.telemetry-rack {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.telemetry-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    background: rgba(9, 13, 22, 0.85);
+    color: var(--brand-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--fx-radius-sm);
 }
 
 .peripheral-blocker {
@@ -168,15 +192,13 @@ video {
     text-shadow: var(--btn-text-shadow);
 }
 
-.btn:hover {
-    filter: brightness(1.15);
-}
-
-.btn:active {
-    transform: translate();
+.btn:hover:not(:disabled) { filter: brightness(1.15); }
+.btn:active:not(:disabled) {
+    transform: translateY(2px);
     border-bottom-width: 1px;
     box-shadow: var(--btn-shadow-active);
 }
+.btn:disabled { opacity: 0.3; cursor: not-allowed;}
 
 .btn.primary {
     background: linear-gradient(to bottom, #385bdf8, #0284c7);
@@ -195,6 +217,8 @@ video {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .panel-block {
@@ -210,6 +234,67 @@ video {
     color: var(--brand-primary);
     margin-bottom: 0.75rem;
     font-weight: 700;
+}
+
+.matrix-filter-stack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.filter-option-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px;
+    background: linear-gradient(to bottom, #1e293b, #111827);
+    border: 1px solid #2e3d54;
+    border-bottom: 3px solid #090d16;
+    border-radius: var(--fx-radius-sm);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #a3b8cc;
+    box-shadow: var(--btn-shadow);
+    text-shadow: var(--btn-text-shadow);
+}
+
+.filter-option-node:hover {
+    filter: brightness(1.15);
+    color: #f8fafc;
+}
+
+.filter-option-node.active {
+    background-color: linear-gradient(to bottom, #0284c7, #0369a1);
+    border-color: #38bdf8;
+    border-bottom: 3px solid #024c78;
+    color: #ffffff;
+}
+
+.adjustment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #090d16;
+    padding: 10px;
+    border-radius: var(--fx-radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.adjustment-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #a3b8cc;
+}
+
+.slide-bar {
+    width: 100%;
+    accent-color: var(--brand-primary);
+    cursor: pointer;
+    height: 6px;
+    background: #1e293b;
+    border-radius: 3px;
 }
 
 .vertical-action-group {
@@ -239,12 +324,21 @@ footer {
     <div class="brand-wrapper">
         <div class="brand-logo">My Selfie <span>Workspace</span></div>
     </div>
+    <div class="system-status">
+        <div class="status-dot" id="system-indicator-dot"></div>
+        <span id="system-status-lbl">DISCONNECTED</span>
+    </div>
 </header>
 
 <div class="app-container">
     <div class="viewport-workspace">
         <div class="media-stage">
+            <div class="telemetry-rack">
+                <span class="telementry-badge" id="telementry-fps">0 FPS</span>
+                <span class="telementry-badge" id="telementry-count">0 Face</span>
+            </div>
             <video id="vid" playsinline autoplay muted></video>
+            <canvas id="cvs"></canvas>
             <div class="peripheral-blocker" id="blocker-overlay"></div>
                 <p>Initialize camera hardware device link to route the media stream to the viewport architecture modules.</p>
                 <button class="btn-primary" onclick="startHardwareStream()">Initialize Stream</button>
@@ -254,12 +348,34 @@ footer {
 
 <div class="properties-sidebar">
     <div class="panel-block">
-        <div class="panel-section-title">Execution Blocks</div>
-        <div class="vertical-action-group">
-            <button class="btn danger" id="action-disconnect" onclick="KillHardwareStream()" style="display: :none;">Terminate Stream Link</button>
+        <div class="panel-section-title">Geonetric Overlays</div>
+        <div class="matrix-filter-block"></div>
+            <button class="filter-option-node active" data-filter="none" onclick="updateActiveOverlayFilter('none', this)">None</button>
+            <button class="filter-option-node" data-filter="shades" onclick="updateActiveOverlayFilter('shade' , this)">Glasses</button>
+            <button class="filter-option-node" data-filter="bunny" onclick="updateActiveOverlayFilter('bunny' , this)">Bunny</button>
         </div>
     </div>
-</div>
+
+    <div class="panel-block">
+        <div class="panel-section-title">Layer Properties</div>
+        <div class="adjustment-cointer">
+            <div class="adjustment-row">
+                <span>Filter Opacicy</span>
+                <span id="intensity-readout">85%</span>
+            </div>
+            <input type="range" class="slider-bar" id="filter-intensity-slider" min="0.1" max="1.0" step="0.05" value="0.85">
+           </div>
+         </div>
+
+         <div class="panel-block">
+            <div class="panel-section-title">Execution Blocks</div>
+            <div class="vertical-action-group">
+                <button class="btn" id="action-mirror" onclick="executeAxizMirrorToggle()" disabled>Reverse Axis Matrix</button>
+                <button class="btn" id="action-grayscale" onclick="executeMonochromeToggle()">Monochromatic View</button>
+                <button class="btn" id="action-disconnect" onclick="killHardwareStream()" style="display:none">Terminate Stream Link</button>
+            </div>
+         </div>
+    </div>
 </div>
 
 <footer>
