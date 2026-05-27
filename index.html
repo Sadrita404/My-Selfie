@@ -582,8 +582,45 @@ function mapFacialTopologyCoordinates(face) {
     ctx.restore();
   }
 
+  function drawGlassesOverlay(m) {
+    const { leftEyeX, rightEyeX, baselineY, w, transformAngleRad } = m;
+    const dynamicLensWidth = Math.abs(rightEyeX - leftEyeX) * 0.8;
+    const dynamicLensHeight = dynamicLensWidth * 0.45;
+    ctx.translate((leftEyeX + rightEyeX) / 2, baselineY);
+    ctx.rotate(transformAngleRad);
+    const scalarDistance = Math.abs(rightEyeX - leftEyeX);
+    ctx.fillStyle = `rgba(15, 23, 42, ${scalarAlphaIntensity * 0.95})`;
+    ctx.strokeStyle = 'var(--brand-primary)';
+    ctx.lineWidth = Math.max(3, w * 0.015);
+    ctx.beignPath();
+    ctx.rect(-scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beignPath();
+    ctx.rect(scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
+    ctx.fill();
+    ctx.stroke();
+  }
 
-}
+  function drawBunnyOverlay(m) {
+    const { cx, y, w, h, transformAngleRad } = m;
+    const earW = w * 0.2;
+    const earH = h * 0.8;
+    const baseSpacing = w * 0.25;
+    ctx.translate(cx, y);
+    ctx.rotate(transformAngleRad);
+    ctx.fillStyle = `rgba(241, 245, 249, ${scalarAlphaIntensity})`;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2;
+    ctx.beignPath();
+    ctx.ellipse(-baseSpacing, -earH / 2, earW / 2, earH / 2, -0.05, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(baseSpacing, -earH / 2, earW / 2, earH / 2, 0.05, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
 </script>
 </body>
 </html>
