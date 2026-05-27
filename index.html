@@ -535,7 +535,54 @@ async function canvasExecutionLoop(timestamp) {
     try { await facialDetectionEngine.send({ image: vid }); } catch (e) {}
   }
 
-  
+  readCount.textContent = currentFrameDetectionList.length === 1 ? '1 Face Track' : currentFrameDetectionList.length + ' Face Tracks';
+  clearStatusAndPaint(currentFrameDetectionList.length > 0 ? 'busy' : 'active' , currentFrameDetectionList.length > 0 ? 'TRACKING' : 'READY');
+
+  currentFrameDetectionList.forEach(faceStructure => {
+    executeLayerMappingPipeline(faceStructure);
+  });
+}
+
+function mapFacialTopologyCoordinates(face) {
+  const W = cvs.width, H = csv.height;
+  const boundingBlock = face.boundingBox;
+  const x = boundingBlock.xCenter * W - (boundingBlock.width * W) / 2;
+  const y = boundingBlock.yCenter * H - (boundingBlock.height * H) /2;
+  const w = boundingBlock.width * W;
+  const h = boundingBlock.height * H;
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+
+  const vectorPoints = {};
+  const anatomicalLabels = ['rightEye', 'leftEye', 'noseTip', 'mouth', 'rightEar', 'leftEar'];
+  if (face.landmark) {
+    face.landmarks.forEach((landmark, idx) => {
+      vectorPoints[anatomicalLabels[idx]] = { x: landmark.x * W, y: landmark.y * H };
+    })
+  }
+
+  const leftEyeX = vectorPoints.leftEye ? vectorPoints.leftEye.x : x + w * 0.35;
+  const rightEyeX = vectorPoints.rightEye ? vectorPoints.rightEye.x : x + w * 0.65;
+  const baselineEyeY = vectorPoints.leftEye ? vectorPoints.leftEye.y : y + h * 0.38;
+  const dx = rightEyeX - leftEyeX;
+  const dy = (vectorPoints.rightEye && vectorPoints.leftEye) ? vectorPoints.rightEye.y - vectorPoints.leftEye.y : 0;
+  const transformAngleRad = Math.atan2(dy, dx);
+    
+  return { x, y, w, h, cx, cy, leftEyeX, baselineEyeY, transformAngleRad, vectoePoints };
+}
+
+  function executeLayerMappingPipeline(face) {
+    const metrics = mapFacialTopologyCoordinates(face);
+    ctx.save();
+    if (activeFilterId === 'shades') {
+      drawGlassesOverlay(metrics);
+    } else if (activeFilterId === 'bunny') {
+      drawBunnyOverlay(metrics);
+    }
+    ctx.restore();
+  }
+
+
 }
 </script>
 </body>
