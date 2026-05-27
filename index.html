@@ -402,11 +402,14 @@ let activeFilterId = 'none';
 let isMirrored = true;
 let isMonochromeEnabled = false;
 let isLoopActive = false;
+let facialDetectionEngine = null;
+let currentFrameDetectionList = [];
 let renderLoopPipelineId = null;
 let diagnosticFrameCount = 0;
 let timestampLastFpsCalculation = 0;
 let realTimeFpsValue = 0;
 let scalarAlphaIntensity = 0.85;
+let timestampLastFrameAnalysis = 0;
 
 sliderIntensity.oninput = () => {
   scalarAlphaIntensity = parseFloat(sliderIntensity.value);
@@ -418,6 +421,8 @@ function clearStatusAndPaint(variant, diagnosticText) {
   indicatorDot.className = 'status-dot';
   if (variant === 'active') {
     indicatorDot.classList.add('active');
+  } else if (variant === 'busy') {
+    indicatorDot.classList.add('computing');
   }
 }
 
@@ -458,6 +463,9 @@ async function startHardwareStream() {
     vid.srcObject = streamObject;
     await new Promise(resolve => { vid.onloadedmetadata = resolve; });
     vid.play();
+
+    isLoopActive = true;
+    await constructStructuralDetectionEngine();
     
     isLoopActive = true;
     blockerOverlay.style.display = 'none';
@@ -471,6 +479,22 @@ async function startHardwareStream() {
   }
 }
 
+async function constructStructuralDetectionEngine() {
+  return new Promise((resolve, reject) => {
+    const detectorModel = new FaceDetection({
+      locateFile: file => 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection.min.js'
+    });
+    detectorModel.setOptions({ model: 'short' , minDetectionConfidence: 0.65 });
+    detectorModel.onResults(payload => {
+      currentFrameDetectionList = payload.detections || [];
+    });
+    detectorModel.initialize().then(() => {
+      facialDetectionEngine = detectorModel;
+      resolve();
+    }).catch(reject);
+  });
+}
+
 function killHardwareStream() {
   isLoopActive = false;
   if (renderLoopPipelineId) cancelAnimationFrame(renderLoopPipelineId);
@@ -482,6 +506,7 @@ function killHardwareStream() {
   btnMirror.disabled = true;
   ctx.clearRect(0, 0, cvs.width, cvs.height);
   clearStatusAndPaint('', 'DISCONNECTED');
+  currentFrameDetectionList = [];
 }
 
 async function canvasExecutionLoop(timestamp) {
@@ -504,6 +529,13 @@ async function canvasExecutionLoop(timestamp) {
     ctx.drawImage(vid, 0, 0, cvs.width, cvs.height);
     ctx.filter = 'none';
   }
+
+  if (facialDetectionEngine && timestamp - timestampLastFrameAnalysis > 60) {
+    timestampLastFrameAnalysis = timestamp;
+    try { await facialDetectionEngine.send({ image: vid }); } catch (e) {}
+  }
+
+  
 }
 </script>
 </body>
