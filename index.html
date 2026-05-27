@@ -87,6 +87,7 @@ header {
   background-color: var(--text-muted);
 }
 .status-dot.active { background-color: #10b981; }
+.status-dot.computing { background-color:var(--brand-primary)}
 
 .app-container {
   width: 100%;
@@ -382,6 +383,7 @@ footer {
   BY Sadrita Neogi
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection.min.js"></script>
 <script>
 const vid = document.getElementById('vid');
 const cvs = document.getElementById('cvs');
@@ -392,6 +394,7 @@ const btnMirror = document.getElementById('action-mirror');
 const indicatorDot = document.getElementById('system-indicator-dot');
 const labelStatus = document.getElementById('system-status-lbl');
 const readFps = document.getElementById('telemetry-fps');
+const readCount = document.getElementById('telemetry-count');
 const sliderIntensity = document.getElementById('filter-intensity-slider');
 const labelIntensity = document.getElementById('intensity-readout');
 
