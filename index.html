@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Selfie - V2</title>
+<title>My Selfie - V3</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -87,7 +87,7 @@ header {
   background-color: var(--text-muted);
 }
 .status-dot.active { background-color: #10b981; }
-.status-dot.computing { background-color:var(--brand-primary)}
+.status-dot.computing { background-color: var(--brand-primary); }
 
 .app-container {
   width: 100%;
@@ -383,7 +383,7 @@ footer {
   BY Sadrita Neogi
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/face_detection.js" crossorigin="anonymous"></script>
 <script>
 const vid = document.getElementById('vid');
 const cvs = document.getElementById('cvs');
@@ -403,7 +403,7 @@ let isMirrored = true;
 let isMonochromeEnabled = false;
 let isLoopActive = false;
 let facialDetectionEngine = null;
-let currentFrameDetectionList = [];
+let currentFrameDetectionsList = [];
 let renderLoopPipelineId = null;
 let diagnosticFrameCount = 0;
 let timestampLastFpsCalculation = 0;
@@ -463,8 +463,8 @@ async function startHardwareStream() {
     vid.srcObject = streamObject;
     await new Promise(resolve => { vid.onloadedmetadata = resolve; });
     vid.play();
-
-    isLoopActive = true;
+    
+    clearStatusAndPaint('', 'INITIALIZING_AI');
     await constructStructuralDetectionEngine();
     
     isLoopActive = true;
@@ -482,11 +482,11 @@ async function startHardwareStream() {
 async function constructStructuralDetectionEngine() {
   return new Promise((resolve, reject) => {
     const detectorModel = new FaceDetection({
-      locateFile: file => 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4.1646425229/face_detection.min.js'
+      locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/${file}`
     });
-    detectorModel.setOptions({ model: 'short' , minDetectionConfidence: 0.65 });
+    detectorModel.setOptions({ model: 'short', minDetectionConfidence: 0.65 });
     detectorModel.onResults(payload => {
-      currentFrameDetectionList = payload.detections || [];
+      currentFrameDetectionsList = payload.detections || [];
     });
     detectorModel.initialize().then(() => {
       facialDetectionEngine = detectorModel;
@@ -506,7 +506,7 @@ function killHardwareStream() {
   btnMirror.disabled = true;
   ctx.clearRect(0, 0, cvs.width, cvs.height);
   clearStatusAndPaint('', 'DISCONNECTED');
-  currentFrameDetectionList = [];
+  currentFrameDetectionsList = [];
 }
 
 async function canvasExecutionLoop(timestamp) {
@@ -535,19 +535,19 @@ async function canvasExecutionLoop(timestamp) {
     try { await facialDetectionEngine.send({ image: vid }); } catch (e) {}
   }
 
-  readCount.textContent = currentFrameDetectionList.length === 1 ? '1 Face Track' : currentFrameDetectionList.length + ' Face Tracks';
-  clearStatusAndPaint(currentFrameDetectionList.length > 0 ? 'busy' : 'active' , currentFrameDetectionList.length > 0 ? 'TRACKING' : 'READY');
+  readCount.textContent = currentFrameDetectionsList.length === 1 ? '1 Face Track' : currentFrameDetectionsList.length + ' Face Tracks';
+  clearStatusAndPaint(currentFrameDetectionsList.length > 0 ? 'busy' : 'active', currentFrameDetectionsList.length > 0 ? 'TRACKING' : 'READY');
 
-  currentFrameDetectionList.forEach(faceStructure => {
+  currentFrameDetectionsList.forEach(faceStructure => {
     executeLayerMappingPipeline(faceStructure);
   });
 }
 
 function mapFacialTopologyCoordinates(face) {
-  const W = cvs.width, H = csv.height;
+  const W = cvs.width, H = cvs.height;
   const boundingBlock = face.boundingBox;
   const x = boundingBlock.xCenter * W - (boundingBlock.width * W) / 2;
-  const y = boundingBlock.yCenter * H - (boundingBlock.height * H) /2;
+  const y = boundingBlock.yCenter * H - (boundingBlock.height * H) / 2;
   const w = boundingBlock.width * W;
   const h = boundingBlock.height * H;
   const cx = x + w / 2;
@@ -555,10 +555,10 @@ function mapFacialTopologyCoordinates(face) {
 
   const vectorPoints = {};
   const anatomicalLabels = ['rightEye', 'leftEye', 'noseTip', 'mouth', 'rightEar', 'leftEar'];
-  if (face.landmark) {
+  if (face.landmarks) {
     face.landmarks.forEach((landmark, idx) => {
       vectorPoints[anatomicalLabels[idx]] = { x: landmark.x * W, y: landmark.y * H };
-    })
+    });
   }
 
   const leftEyeX = vectorPoints.leftEye ? vectorPoints.leftEye.x : x + w * 0.35;
@@ -567,60 +567,60 @@ function mapFacialTopologyCoordinates(face) {
   const dx = rightEyeX - leftEyeX;
   const dy = (vectorPoints.rightEye && vectorPoints.leftEye) ? vectorPoints.rightEye.y - vectorPoints.leftEye.y : 0;
   const transformAngleRad = Math.atan2(dy, dx);
-    
-  return { x, y, w, h, cx, cy, leftEyeX, baselineEyeY, transformAngleRad, vectoePoints };
+
+  return { x, y, w, h, cx, cy, leftEyeX, rightEyeX, baselineEyeY, transformAngleRad, vectorPoints };
 }
 
-  function executeLayerMappingPipeline(face) {
-    const metrics = mapFacialTopologyCoordinates(face);
-    ctx.save();
-    if (activeFilterId === 'shades') {
-      drawGlassesOverlay(metrics);
-    } else if (activeFilterId === 'bunny') {
-      drawBunnyOverlay(metrics);
-    }
-    ctx.restore();
+function executeLayerMappingPipeline(face) {
+  const metrics = mapFacialTopologyCoordinates(face);
+  ctx.save();
+  if (activeFilterId === 'shades') {
+    drawGlassesOverlay(metrics);
+  } else if (activeFilterId === 'bunny') {
+    drawBunnyOverlay(metrics);
   }
+  ctx.restore();
+}
 
-  function drawGlassesOverlay(m) {
-    const { leftEyeX, rightEyeX, baselineY, w, transformAngleRad } = m;
-    const dynamicLensWidth = Math.abs(rightEyeX - leftEyeX) * 0.8;
-    const dynamicLensHeight = dynamicLensWidth * 0.45;
-    ctx.translate((leftEyeX + rightEyeX) / 2, baselineY);
-    ctx.rotate(transformAngleRad);
-    const scalarDistance = Math.abs(rightEyeX - leftEyeX);
-    ctx.fillStyle = `rgba(15, 23, 42, ${scalarAlphaIntensity * 0.95})`;
-    ctx.strokeStyle = 'var(--brand-primary)';
-    ctx.lineWidth = Math.max(3, w * 0.015);
-    ctx.beignPath();
-    ctx.rect(-scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
-    ctx.fill();
-    ctx.stroke();
-    ctx.beignPath();
-    ctx.rect(scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
-    ctx.fill();
-    ctx.stroke();
-  }
+function drawGlassesOverlay(m) {
+  const { leftEyeX, rightEyeX, baselineEyeY, w, transformAngleRad } = m;
+  const dynamicLensWidth = Math.abs(rightEyeX - leftEyeX) * 0.8;
+  const dynamicLensHeight = dynamicLensWidth * 0.45;
+  ctx.translate((leftEyeX + rightEyeX) / 2, baselineEyeY);
+  ctx.rotate(transformAngleRad);
+  const scalarDistance = Math.abs(rightEyeX - leftEyeX);
+  ctx.fillStyle = `rgba(15, 23, 42, ${scalarAlphaIntensity * 0.95})`;
+  ctx.strokeStyle = 'var(--brand-primary)';
+  ctx.lineWidth = Math.max(3, w * 0.015);
+  ctx.beginPath();
+  ctx.rect(-scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.rect(scalarDistance / 2 - dynamicLensWidth / 2, -dynamicLensHeight / 2, dynamicLensWidth, dynamicLensHeight);
+  ctx.fill();
+  ctx.stroke();
+}
 
-  function drawBunnyOverlay(m) {
-    const { cx, y, w, h, transformAngleRad } = m;
-    const earW = w * 0.2;
-    const earH = h * 0.8;
-    const baseSpacing = w * 0.25;
-    ctx.translate(cx, y);
-    ctx.rotate(transformAngleRad);
-    ctx.fillStyle = `rgba(241, 245, 249, ${scalarAlphaIntensity})`;
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.lineWidth = 2;
-    ctx.beignPath();
-    ctx.ellipse(-baseSpacing, -earH / 2, earW / 2, earH / 2, -0.05, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.ellipse(baseSpacing, -earH / 2, earW / 2, earH / 2, 0.05, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-  }
+function drawBunnyOverlay(m) {
+  const { cx, y, w, h, transformAngleRad } = m;
+  const earW = w * 0.2;
+  const earH = h * 0.8;
+  const baseSpacing = w * 0.25;
+  ctx.translate(cx, y);
+  ctx.rotate(transformAngleRad);
+  ctx.fillStyle = `rgba(241, 245, 249, ${scalarAlphaIntensity})`;
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.ellipse(-baseSpacing, -earH / 2, earW / 2, earH / 2, -0.05, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(baseSpacing, -earH / 2, earW / 2, earH / 2, 0.05, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+}
 </script>
 </body>
 </html>
