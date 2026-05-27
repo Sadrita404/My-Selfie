@@ -204,7 +204,7 @@ video { transform: scaleX(-1); }
     background: linear-gradient(to bottom, #385bdf8, #0284c7);
     color: #040811;
     border-color: #7dd3fc;
-    border-bottom-color: #0369a1;
+    border-bottom-color: #0369a1; 
 }
 
 .btn.danger {
@@ -384,31 +384,123 @@ footer {
 
 <script>
     const vid = document.getElementById('vid');
+    const cvs = document.getElementById('cvs');
+    const ctx = document.getContext('2d');
     const blockerOverlay = document.getElementById('blocker-overlay');
     const btnDisconnect = document.getElementById('action-disconnect');
+    const btnMirror = document.getElementById('action-mirror');
+    const indicatorDot = document.getElementById('system-indicator-dot');
+    const labelStatus = document.getElementById('system-status-lbl');
+    const readFps = document.getElementById('telemetry-fps');
+    const sliderIntensity = document.getElementById('filter-intensity-slider');
+    const lableIntensity = document.getElementById('intensity-readout');
+
+    let activeFilterId = 'none';
+    let isMirrored = true;
+    let isMonochromeEnabled = false;
+    let isLoopActive = false;
+    let renderLoopPipelined = null;
+    let diagnosticFrameCount = 0;
+    let timestampLastFpsCalculation = 0;
+    let realTimeFpsValue = 0;
+    let scalarAlphaIntensity = 0.85;
+
+    sliderIntensity.oninput = () => {
+        scalarAlphaIntensity = parseFloat(sliderIntensity.value);
+        lableIntensity.textContent = Math.round(scalarAlphaIntensity * 100) + `%`;
+    };
+
+    function clearStatusAndPaint(varient, diagnosticText) {
+        labelStatus.textContent = diagnosticText;
+        indicatorDot.className = 'status-dot';
+        if (varient === 'active') {
+            indicatorDot.classList.add('active');
+        }
+    }
+
+    function updateActiveOverlayFilter(filterTarget, activeNodeElement) {
+        activeFilterId = filterTarget;
+        const listItems = document.querySelectorAll('.filter-option-node');
+        listItems.forEach(node => node.classList.remove('actie'));
+        activeNodeElement.classList.add('active');
+    }
+
+    function executeAxisMirrorToggle() {
+        isMirrored = !isMirrored
+        vid.style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+        cvs.style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+    }
+
+    function executeMonochromeToggle() {
+        isMonochromeEnabled = !isMonochromeEnabled;
+        const toggleBtn = document.getElementById('action-grayscale');
+        if (isMonochromeEnabled) {
+            toggleBtn.style.background = 'linear-gradient(to bottom, #0284c7, #0369a1)';
+            toggleBtn.style.borderColor = '#38bdf8';
+            toggleBtn.style.borderBottomColor = '#024e78';
+        } else {
+            toggleBtn.style.background = '';
+            toggleBtn.style.borderColor =  '';
+            toggleBtn.style.borderBottomColor = '';
+        }
+    }
 
     async function startHardwareStream() {
+        clearStatusAndPaint('', 'CONNECTING');
         try {
-            const streamObject = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-                audio: false
+            const streamObject = await navigation.mediaDevices.getUserMedia({
+                video: { facingMode: 'user', width: { ideal: 1200}, height: { ideal: 720}},
+                audio: false 
             });
             vid.srcObject = streamObject;
             await new Promise(resolve => { vid.onloadedmetadata = resolve; });
             vid.play();
+
+            isLoopActive = true;
             blockerOverlay.style.display = 'none';
-            btnDisconnect.style.display = 'inline-flex'
-        } catch (eer) {
-            alert('Camera access denied');
+            btnDisconnect.style.display = 'inline-flex';
+            btnMirror.disabled = false;
+
+            clearStatusAndPaint('active', 'READY');
+            requestAnimationFrame(canvasExecutionLoop);
+        } catch (err) {
+            clearStatusAndPaint('', 'PERMISSIONS_DENIED');
         }
     }
 
     function killHardwareStream() {
+        isLoopActive = false;
+        if (renderLoopPipelined) cancelAnimationFrame(renderLoopPipelinedId);
         if (vid.srcObject) {
             vid.srcObject.getTracks().forEach(track => track.stop());
         }
         blockerOverlay.style.display = 'flex';
         btnDisconnect.style.display = 'none';
+        btnMirror.disabled = true;
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        clearStatusAndPaint('', 'DISCONNECTED');
+    }
+
+    async function canvasExecutionLoop(timestamp) {
+        if (!isLoopActive) return;
+        renderLoopPipelinedId = requestAnimationFrame(canvasExecutionLoop);
+
+        diagnosticFrameCount++;
+        if (timestamp - timestampLastFpsCalculation >= 1000) {
+            realTimeFpsValue = diagnosticFrameCount;
+            diagnosticFrameCount = 0;
+            timestampLastFpsCalculation = timestamp;
+            readFps.textContent = realTimeFpsValue + ' FPS';
+        }
+
+        cvs.width = vid.videoWidth || 640;
+        cvs.height = vid.videoHeight || 480;
+
+        if (isMonochromeEnabled) {
+            ctx.filter = 'grayscale(1)';
+            ctx.drawImage(vid, 0, 0, cvs.width, cvs.height);
+            ctx.filter = 'none';
+        }
     }
 </script>
 </body>  
