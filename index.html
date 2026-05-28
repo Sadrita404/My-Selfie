@@ -40,10 +40,13 @@
   --brand-primary: #38bdf8;
   --brand-active-bg: #0284c7;
   --system-danger: #f43f5e;
+  --system-danger-bg: #4c0519;
+
   --fx-radius: 10px;
   --fx-radius-sm: 6px;
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
   --btn-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 4px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
   --btn-shadow-active: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(255, 255, 255, 0.05);
   --btn-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -58,6 +61,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  -webkit-font-smoothing: antialised;
 }
 
 header {
@@ -69,12 +73,21 @@ header {
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .brand-logo {
   font-weight: 700;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
+  color: var(--text-main);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .brand-logo span {
@@ -94,6 +107,7 @@ header {
   padding: 6px 14px;
   border-radius: 30px;
   border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .status-dot {
@@ -101,9 +115,16 @@ header {
   height: 7px;
   border-radius: 50%;
   background-color: var(--text-muted);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
 }
-.status-dot.active { background-color: #10b981; }
-.status-dot.computing { background-color: var(--brand-primary); }
+.status-dot.active { 
+  background-color: #10b981; 
+  box-shadow: 0 0 8px #10b981;
+}
+.status-dot.computing {
+   background-color: var(--brand-primary);
+   box-shadow: 0 0 8px var(--brand-primary);
+}
 
 .app-container {
   width: 100%;
@@ -127,16 +148,20 @@ header {
   flex-direction: column;
   justify-content: center;
   min-height: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .media-stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  max-height: 100%;
   background-color: var(--canvas-bg);
   border-radius: var(--fx-radius-sm);
   overflow: hidden;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto;
   border: 2px solid #090d16;
+  box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.8), 0 1px 1px rgba(255,255,255,0.05);
 }
 
 video, canvas {
@@ -165,9 +190,11 @@ video { transform: scaleX(-1); }
   font-weight: 600;
   padding: 5px 10px;
   background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(6px);
   color: var(--brand-primary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--fx-radius-sm);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .peripheral-blocker {
@@ -181,6 +208,7 @@ video { transform: scaleX(-1); }
   justify-content: center;
   gap: 1.5rem;
   padding: 2rem;
+  text-align: center;
 }
 
 .peripheral-blocker p {
