@@ -461,15 +461,17 @@ footer {
   </div>
 </header>
 
-<div class="app-container">
+ <class="app-container">
   <div class="viewport-workspace">
-    <div class="media-stage">
+    <div class="media-stage" id="stage-viewport">
       <div class="telemetry-rack">
         <span class="telemetry-badge" id="telemetry-fps">0 FPS</span>
         <span class="telemetry-badge" id="telemetry-count">0 Face Tracks</span>
       </div>
+
       <video id="vid" playsinline autoplay muted></video>
       <canvas id="cvs"></canvas>
+
       <div class="peripheral-blocker" id="blocker-overlay">
         <p>Initialize camera hardware device link to route the media stream to the viewport architecture modules.</p>
         <button class="btn primary" onclick="startHardwareStream()">Initialize Stream</button>
@@ -484,6 +486,17 @@ footer {
         <button class="filter-option-node active" data-filter="none" onclick="updateActiveOverlayFilter('none', this)">None</button>
         <button class="filter-option-node" data-filter="shades" onclick="updateActiveOverlayFilter('shades', this)">Glasses</button>
         <button class="filter-option-node" data-filter="bunny" onclick="updateActiveOverlayFilter('bunny', this)">Bunny</button>
+        <button class="filter-option-node" data-filter="devil" onclick="updateActiveOverlayFilter('devil', this)">Devil</button>
+        <button class="filter-option-node" data-filter="crown" onclick="updateActiveOverlayFilter('crown', this)">Crown</button>  
+        <button class="filter-option-node" data-filter="tophat" onclick="updateActiveOverlayFilter('tophat', this)">Top Hat</button>
+        <button class="filter-option-node" data-filter="clown" onclick="updateActiveOverlayFilter('clown', this)">Clown</button>
+        <button class="filter-option-node" data-filter="fire" onclick="updateActiveOverlayFilter('fire, this')">Thermal</button>
+        <button class="filter-option-node" data-filter="halo" onclick="updateActiveOverlayFilter('halo', this)">Halo</button>
+        <button class="filter-option-node" data-filter="rainbow" onclick="updateActiveOverlayFilter('rainbow', this)">Rainbow</button>
+        <button class="filter-option-node" data-filter="cyber" onclick="updateActiveOverlayFilter('cyber', this)">HUD Target</button>
+        <button class="filter-option-node" data-filter="pixel" onclick="updateActiveOverlayFilter('pixel', this)">Pixelate</button>
+        <button class="filter-option-node" data-filter="matrix" onclick="updateActiveOverlayFilter('matrix', this)">Binary Stream</button>
+        <button class="filter-option-node" data-filter="glitch" onclick="updateActiveOverlayFilter('glitch', this)">Glitch</button>
       </div>
     </div>
 
