@@ -854,6 +854,55 @@ function drawBunnyOverlay(m) {
   ctx.fill();
 }
 
+function drawDevilOverlay(m) {
+  const { cx, y, w, h, transformAngleRad } = m;
+  const hornW = w * 0.15;
+  const hornH = h * 0.4;
+  const hornSeparation = w * 0.3;
+
+  ctx.translate(cx, y + h * 0.05);
+  ctx.rotate(transformAngleRad);
+
+  ctx.fillStyle = `rgba(239, 64, 64, ${scalarAlphaIntensity})`;
+  ctx.strokeStyle = '#991b1b'
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(-hornSeparation - hornW / 2, 0);
+  ctx.quadraticCurveTo(-hornSeparation, -hornH * 0.5, -hornSeparation + hornW / 2, 0);
+  ctx.quadraticCurveTo(-hornSeparation, -hornH * 0.5, -hornSeparation + hornW / 2,0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(hornSeparation + hornW / 2, 0);
+  ctx.quadraticCurveTo(hornSeparation + hornW, -hornH * 0.6, hornSeparation + hornW * 0.4, -hornH);
+  ctx.quadraticCurveTo(hornSeparation, -hornH * 0.5, hornSeparation + hornW / 2, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+
+function drawCrownOverlay(m) {
+  const { cx, y, w, h, transformAngleRad } = m;
+  const totalCrownWidth = w * 0.8;
+  const totalCrownHeight = h * 0.35;
+
+  ctx.translate(cx, y);
+  ctx.rotate(transformAngleRad);
+
+  ctx.beginPath();
+  ctx.moveTo(-totalCrownWidth / 2, 0);
+  ctx.lineTo(-totalCrownWidth / 2, -totalCrownHeight * 0.5);
+  ctx.lineTo(-totalCrownWidth * 0.25, -totalCrownHeight * 0.2);
+  ctx.lineTo(0, -totalCrownHeight);
+  ctx.lineTo(totalCrownWidth * 0.25, -totalCrownHeight * 0.2);
+  ctx.lineTo(totalCrownWidth / 2, -totalCrownHeight * 0.5);
+  ctx.lineTo(totalCrownWidth / 2, 0);
+  ctx.closePath();
+  
+}
 </script>
 </body>
 </html>
