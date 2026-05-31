@@ -79,6 +79,10 @@ I want to build something on top of this filter app so I make it from scrtch and
 
 
 ---
+Ai Use - I have use ai to generate the thumbnail of the youtube video only .
+
+--
+
 
 ### For contributing to this project, first for the repo and add additional changes to make the website more good can you make a pull request I Will surely check that and merge it.
 
