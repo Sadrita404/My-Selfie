@@ -1076,6 +1076,69 @@ function drawGlitchOverlay(m) {
   ctx.restore();
 }
 
+function generateBinaryMatrixDataPoints() {
+  binaryColumnHeightArray = [];
+  const calculatedColumnsTotal = Math.floor(1280 / 16);
+  for (let columnIdx =0; columnIdx < calculatedColumnsTotal; columnIdx++) {
+    binaryColumnHeightArray.push(Math.random() * 720);
+  }
+}
+
+function computeBinaryMatrixFrame() {
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.2)';
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+  ctx.fillStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity})`;
+  ctx.font = "600 12px 'JetBrains Mono'";
+
+  const systemWesternCharSet = '01100101010111001' .split('');
+
+  binaryColumnHeightArray.forEach((yTrackPosition, currentColumnIndex) => {
+    const alphanumericCharacter = systemWesternCharSet[Math.floor(Math.random() * systemWesternCharSet.length)];
+    ctx.fillText(alphanumericCharacter, currentColumnIndex * 16, yTrackPosition);
+
+    if (yTrackPosition > cvs.height && Math.random() > 0.975) {
+      binaryColumnHeightArray[currentColumnIndex] = 0;
+    } else {
+      binaryColumnHeightArray[currentColumnIndex] = yTrackPosition + 16;
+    }
+  });
+}
+
+function executeStudioSnapshot() {
+  const finalCanvasBuffer = document.getElementById('hidden-canvas');
+  finalCanvasBuffer.width = cvs.width;
+  finalCanvasBuffer.height = cvs.height;
+  const drawTargetContext = finalCanvasBuffer.getContext('2d');
+
+  drawTargetContext.save();
+  if (isMirrored) {
+    drawTargetContext.translate(finalCanvasBuffer.width, 0);
+    drawTargetContext.scale(-1, 1);
+  }
+  if (isMonochromeEnabled) {
+    drawTargetContext.filter = 'grayscale(1)';
+  }
+  drawTargetContext.drawImage(vid, 0, 0, finalCanvasBuffer.width, finalCanvasBuffer.height);
+  drawTargetContext.restore();
+
+  drawTargetContext.save();
+  if (isMirrored) {
+    drawTargetContext.translate(finalCanvasBuffer.width, 0);
+    drawTargetContext.scale(-1, 1);
+  }
+  drawTargetContext.drawImage(cvs, 0, 0);
+  drawTargetContext.restore();
+
+  shutterFlash.style.animation = 'none';
+  void shutterFlash.offsetWidth;
+  shutterFlash.style.animation = 'trigger-shutter 0.4s ease-out forwards';
+
+  const automaticFileAnchor = document.createElement('a');
+  automaticFileAnchor.download = `Selfie_${Date.now()}.png`;
+  automaticFileAnchor.href = finalCanvasBuffer.toDateURL('image/png');
+  automaticFileAnchor.click();
+}
 </script>
 </body>
 </html>
