@@ -20,7 +20,7 @@
 @property --cl {
   syntax: '<color>';
     inherits: true;
-    initial-value: #38bdf8;
+    initial-value: #38bdf8 ;
 }
 
 *, *::before, *::after {
@@ -831,7 +831,7 @@ function drawBunnyOverlay(m) {
   ctx.rotate(transformAngleRad);
 
   ctx.fillStyle = `rgba(241, 245, 249, ${scalarAlphaIntensity})`;
-  ctx.strokeStyle = '#cbd5e1';
+  ctx.strokeStyle = '#cbd5e1' ;
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -864,7 +864,7 @@ function drawDevilOverlay(m) {
   ctx.rotate(transformAngleRad);
 
   ctx.fillStyle = `rgba(239, 64, 64, ${scalarAlphaIntensity})`;
-  ctx.strokeStyle = '#991b1b'
+  ctx.strokeStyle = '#991b1b' ;
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -901,8 +901,107 @@ function drawCrownOverlay(m) {
   ctx.lineTo(totalCrownWidth / 2, -totalCrownHeight * 0.5);
   ctx.lineTo(totalCrownWidth / 2, 0);
   ctx.closePath();
-  
+
+  ctx.fillStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity})`;
+  ctx.strokeStyle = '#0284c7' ;
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#f8fafc' ;
+  ctx.beginPath(); ctx.arc(-totalCrownWidth / 2, -totalCrownHeight * 0.5, w * 0.025, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(totalCrownWidth / 2, -totalCrownWidth * 0.5, w * 0.025, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(0, -totalCrownHeight, w * 0.03, 0, Math.PI * 2); ctx.fill();
 }
+
+function drawTopHatOverlay(m) {
+  const { cx, y, w, h, transformAngleRad } = m;
+  const coreHatWidth = w * 0.65;
+  const totalHatHeight = h * 0.7;
+  const rimWidth = w * 0.95;
+  const rimHeight = h * 0.08;
+
+  ctx.translate(cx, y + h * 0.05);
+  ctx.rotate(transformAngleRad);
+  
+  ctx.fillStyle = `rgba(30, 41, 59, ${scalarAlphaIntensity})`;
+  ctx.fillRect(-coreHatWidth / 2, -totalHatHeight, coreHatWidth, totalHatHeight);
+
+  ctx.fillStyle = `rgba(15, 23, 42, ${scalarAlphaIntensity})`;
+  ctx.fillRect(-rimWidth / 2, -rimHeight, rimWidth, rimHeight);
+
+  ctx.fillStyle = 'var(--brand-primary)';
+  ctx.fillRect(-coreHatWidth / 2, -rimHeight - (totalHatHeight * 0.12), coreHatWidth, totalHatHeight * 0.12);
+}
+
+function drawClownOverlay(m) {
+  const { cx, y, w, h, transformAngleRad, vectorPoints } = m;
+
+  ctx.translate(cx, y + h / 2);
+  ctx.rotate(transformAngleRad);
+
+  const transformToLocalSpace = (targetKeyPoint) => {
+    if (!targetKeyPoint) return { x: 0, y: 0};
+    return {
+      x: targetKeyPoint.x - cx,
+      y: targetKeyPoint.y - (y + h / 2)
+    };
+  };
+
+  const targetLeftEyeLocal = transformToLocalSpace(vectorPoints.leftEye);
+  const targetRightEyeLocal = transformToLocalSpace(vectorPoints.rightEye);
+  const computedNoseLocal = transformToLocalSpace(vectorPoints.noseTip);
+
+  ctx.fillStyle = 'var(--brand-primary)';
+  ctx.globalAlpha = scalarAlphaIntensity;
+
+  ctx.beginPath();
+  ctx.arc(targetLeftEyeLocal.x || -w * 0.2, (targetLeftEyeLocal.y || -h * 0.1) - 5, w * 0.06, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(targetRightEyeLocal.x || w * 0.2, (targetRightEyeLocal.y || -h * 0.1) - 5, w * 0.06, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 1.0;
+  ctx.fillStyle = '#ef4444' ;
+  ctx.beginPath();
+  ctx.arc(computedNoseLocal.x, computedNoseLocal.y, w * 0.09, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawThermalOverlay(m) {
+  const { x, y, w, h } = m;
+  ctx.save();
+  ctx.globalAlpha = scalarAlphaIntensity * 0.45;
+  ctx.fillStyle = '#0284c7';
+  ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = 'var(--brand-primary)';
+  ctx.fillRect(x + w * 0.2, y + h * 0.2, w * 0.6, h * 0.5);
+  ctx.restore();
+}
+
+function drawHaloOverlay(m) {
+  const { cx, y, w, transformAngleRad } = m;
+  const trackingRadiusW = w * 0.45;
+  const trackingRadiusH = trackingRadiusW * 0.25;
+
+  ctx.translate(cx, y - 25);
+  ctx.rotate(transformAngleRad);
+
+  ctx.strokeStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity})`;
+  ctx.lineWidth = Math.max(4, w * 0.016);
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = 'var(--brand-primary)';
+
+  ctx.beginPath();
+  ctx.ellipse(0, 0, trackingRadiusW, trackingRadiusH, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+}
+
+
 </script>
 </body>
 </html>
