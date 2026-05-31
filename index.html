@@ -1001,6 +1001,80 @@ function drawHaloOverlay(m) {
   ctx.shadowBlur = 0;
 }
 
+function drawRainbowOverlay(m) {
+  const { cx, y, w, h } = m;
+  const dynamicThickness = Math.max(4, w * 0.03);
+  const colorHexArray = ['#38bbdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#1e3a8a'];
+
+  ctx.save();
+  ctx.globalAlpha = scalarAlphaIntensity * 0.8;
+  colorHexArray.forEach((hex, metricIndx) => {
+    ctx.strokeStyle = hex;
+    ctx.lineWidth = dynamicThickness;
+    ctx.beginPath();
+    ctx.arc(cx, y + h * 0.5, (w * 0.6) - (metricIndx * dynamicThickness), Math.PI, 0, false);
+    ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function drawCyberHUDOverlay(m) {
+  const { x, y, w, h, cx, cy } = m;
+  ctx.strokeStyle = 'var(--brand-primary)';
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = scalarAlphaIntensity;
+
+  ctx.strokeRect(x, y, w, h);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - 20); ctx.lineTo(cx, cy + 20);
+  ctx.moveTo(cx, cy - 20); ctx.lineTo(cx, cy + 20);
+  ctx.stroke();
+
+  ctx.fillStyle = 'var(--brand-primary)';
+  ctx.font = "600 11px 'JetBrains Mono'";
+  ctx.fillText("TARGET_LOCK", x + 12, y + 22);
+}
+
+function drawPixelationOverlay(m) {
+  const { x, y, w, h } = m;
+  const structuralX = Math.max(0, Math.floor(x));
+  const structuralY = Math.max(0, Math.floor(y));
+  const spatialW = Math.min(cvs.width - structuralX, Math.floor(w));
+  const spatialH = Math.min(cvs.height - structuralY, Math.floor(h));
+
+  if (spatialW <= 0 || spatialH <= 0) return;
+
+  const executionCanvasBuffer = document.createElement('canvas');
+  executionCanvasBuffer.width = cvs.width;
+  executionCanvasBuffer.height = cvs.height;
+  executionCanvasBuffer.getContext('2d').drawImage(vid, 0, 0, cvs.width, cvs.height);
+
+  const processingGridSize = Math.max(10, Math.floor(w / 15));
+  const frameworkBytesDataset = executionCanvasBuffer.getContext('2d').getImageData(structuralX, structuralY, spatialW, spatialH);
+
+  for (let innerY = 0; innerY < spatialH; innerY += processingGridSize) {
+    for (let innerX = 0; innerX < spatialW; innerX += processingGridSize) {
+      const calculatedByteIndex = (innerY * spatialW + innerX) * 4;
+      const r = frameworkBytesDataset.data[calculatedByteIndex];
+      const g = frameworkBytesDataset.data[calculatedByteIndex];
+      const b = frameworkBytesDataset.data[calculatedByteIndex];
+
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(structuralX + innerX, structuralY + innerY, processingGridSize, processingGridSize);
+    }
+  }
+}
+
+function drawGlitchOverlay(m) {
+  const { x, y, w, h } = m;
+  ctx.save();
+  ctx.globalAlpha = scalarAlphaIntensity * 0.6;
+  ctx.fillStyle = 'var(--brand-primary)';
+  ctx.fillRect(x + (Math.random() * 16 - 8), y, w, h);
+  ctx.fillStyle = '#0284c7' ;
+  ctx.fillRect(x + (Math.random() * 16 - 8), y, w, h);
+  ctx.restore();
+}
 
 </script>
 </body>
