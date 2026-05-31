@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Selfie - V3</title>
+<title>My Selfie</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @property --a {
-    syntax: '<angle>';
-    inherits: true;
-    initial-value: 0deg'
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
 }
 @property --p {
-    syntax: '<percentage>';
-    inherits: true;
-    initial-value: 0%;
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
 }
-@property --cl {
+@property --c1 {
   syntax: '<color>';
-    inherits: true;
-    initial-value: #38bdf8 ;
+  inherits: true;
+  initial-value: #38bdf8;
 }
 
 *, *::before, *::after {
@@ -41,12 +41,12 @@
   --brand-active-bg: #0284c7;
   --system-danger: #f43f5e;
   --system-danger-bg: #4c0519;
-
+  
   --fx-radius: 10px;
   --fx-radius-sm: 6px;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-
+  
   --btn-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 4px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
   --btn-shadow-active: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(255, 255, 255, 0.05);
   --btn-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -61,7 +61,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  -webkit-font-smoothing: antialised;
+  -webkit-font-smoothing: antialiased;
 }
 
 header {
@@ -107,7 +107,7 @@ header {
   padding: 6px 14px;
   border-radius: 30px;
   border: 1px solid var(--border-subtle);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .status-dot {
@@ -115,15 +115,15 @@ header {
   height: 7px;
   border-radius: 50%;
   background-color: var(--text-muted);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 4px rgba(0,0,0,0.6);
 }
 .status-dot.active { 
   background-color: #10b981; 
   box-shadow: 0 0 8px #10b981;
 }
-.status-dot.computing {
-   background-color: var(--brand-primary);
-   box-shadow: 0 0 8px var(--brand-primary);
+.status-dot.computing { 
+  background-color: var(--brand-primary); 
+  box-shadow: 0 0 8px var(--brand-primary);
 }
 
 .app-container {
@@ -148,7 +148,7 @@ header {
   flex-direction: column;
   justify-content: center;
   min-height: 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 .media-stage {
@@ -194,7 +194,7 @@ video { transform: scaleX(-1); }
   color: var(--brand-primary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--fx-radius-sm);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 .peripheral-blocker {
@@ -216,7 +216,7 @@ video { transform: scaleX(-1); }
   font-size: 0.9rem;
   max-width: 380px;
   line-height: 1.5;
-  text-align: center;
+  font-weight: 500;
 }
 
 .btn {
@@ -233,7 +233,7 @@ video { transform: scaleX(-1); }
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03rem;
+  letter-spacing: 0.03em;
   cursor: pointer;
   box-shadow: var(--btn-shadow);
   text-shadow: var(--btn-text-shadow);
@@ -241,8 +241,8 @@ video { transform: scaleX(-1); }
   font-family: inherit;
 }
 
-.btn:hover:not(:disabled) { 
-  filter: brightness(1.15); 
+.btn:hover:not(:disabled) {
+  filter: brightness(1.15);
   border-color: #4a6896;
 }
 
@@ -257,10 +257,10 @@ video { transform: scaleX(-1); }
   color: #040811;
   border-color: #7dd3fc;
   border-bottom-color: #0369a1;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.04);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-.btn.primary:active:not(:disabled) {
+.btn.primary:hover:not(:disabled) {
   filter: brightness(1.2);
   border-color: #bae6fd;
 }
@@ -294,7 +294,7 @@ video { transform: scaleX(-1); }
   gap: 1rem;
   min-height: 0;
   overflow-y: auto;
-  padding: 4px;
+  padding-right: 4px;
 }
 
 .properties-sidebar::-webkit-scrollbar {
@@ -313,17 +313,17 @@ video { transform: scaleX(-1); }
   border: 1px solid var(--border-subtle);
   border-radius: var(--fx-radius);
   padding: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .panel-section-title {
   font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.08rem;
+  letter-spacing: 0.08em;
   color: var(--brand-primary);
   margin-bottom: 0.75rem;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .matrix-filter-stack {
@@ -357,7 +357,7 @@ video { transform: scaleX(-1); }
   border-color: #3b4e6b;
 }
 
-.filter-option-node.active {
+.filter-option-node:active {
   transform: translateY(2px);
   border-bottom-width: 1px;
   box-shadow: var(--btn-shadow-active);
@@ -369,7 +369,7 @@ video { transform: scaleX(-1); }
   border-bottom: 3px solid #024e78;
   color: #ffffff;
   font-weight: 700;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) 0 0 10px rgba(56, 189, 248, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 10px rgba(56, 189, 248, 0.2);
 }
 
 .filter-option-node.active:active {
@@ -384,7 +384,7 @@ video { transform: scaleX(-1); }
   padding: 10px;
   border-radius: var(--fx-radius-sm);
   border: 1px solid var(--border-subtle);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .adjustment-row {
@@ -446,7 +446,7 @@ footer {
   100% { opacity: 0; }
 }
 
-#hidden-canvas { display: none;}
+#hidden-canvas { display: none; }
 </style>
 </head>
 <body>
@@ -461,14 +461,14 @@ footer {
   </div>
 </header>
 
- <class="app-container">
+<div class="app-container">
   <div class="viewport-workspace">
     <div class="media-stage" id="stage-viewport">
       <div class="telemetry-rack">
         <span class="telemetry-badge" id="telemetry-fps">0 FPS</span>
         <span class="telemetry-badge" id="telemetry-count">0 Face Tracks</span>
       </div>
-
+      
       <video id="vid" playsinline autoplay muted></video>
       <canvas id="cvs"></canvas>
 
@@ -487,10 +487,10 @@ footer {
         <button class="filter-option-node" data-filter="shades" onclick="updateActiveOverlayFilter('shades', this)">Glasses</button>
         <button class="filter-option-node" data-filter="bunny" onclick="updateActiveOverlayFilter('bunny', this)">Bunny</button>
         <button class="filter-option-node" data-filter="devil" onclick="updateActiveOverlayFilter('devil', this)">Devil</button>
-        <button class="filter-option-node" data-filter="crown" onclick="updateActiveOverlayFilter('crown', this)">Crown</button>  
+        <button class="filter-option-node" data-filter="crown" onclick="updateActiveOverlayFilter('crown', this)">Crown</button>
         <button class="filter-option-node" data-filter="tophat" onclick="updateActiveOverlayFilter('tophat', this)">Top Hat</button>
         <button class="filter-option-node" data-filter="clown" onclick="updateActiveOverlayFilter('clown', this)">Clown</button>
-        <button class="filter-option-node" data-filter="fire" onclick="updateActiveOverlayFilter('fire, this')">Thermal</button>
+        <button class="filter-option-node" data-filter="fire" onclick="updateActiveOverlayFilter('fire', this)">Thermal</button>
         <button class="filter-option-node" data-filter="halo" onclick="updateActiveOverlayFilter('halo', this)">Halo</button>
         <button class="filter-option-node" data-filter="rainbow" onclick="updateActiveOverlayFilter('rainbow', this)">Rainbow</button>
         <button class="filter-option-node" data-filter="cyber" onclick="updateActiveOverlayFilter('cyber', this)">HUD Target</button>
@@ -559,7 +559,7 @@ let timestampLastFpsCalculation = 0;
 let realTimeFpsValue = 0;
 let scalarAlphaIntensity = 0.85;
 let timestampLastFrameAnalysis = 0;
-let binaryColumnHeightArray = [];
+let binaryColumnHeightsArray = [];
 
 sliderIntensity.oninput = () => {
   scalarAlphaIntensity = parseFloat(sliderIntensity.value);
@@ -579,9 +579,9 @@ function clearStatusAndPaint(variant, diagnosticText) {
 function updateActiveOverlayFilter(filterTarget, activeNodeElement) {
   activeFilterId = filterTarget;
   const listItems = document.querySelectorAll('.filter-option-node');
-  listItems.forEach(node => 
-  node.classList.remove('active')
-  );
+  listItems.forEach(node => {
+    node.classList.remove('active');
+  });
   activeNodeElement.classList.add('active');
 }
 
@@ -644,12 +644,12 @@ async function constructStructuralDetectionEngine() {
     const detectorModel = new FaceDetection({
       locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/${file}`
     });
-
+    
     detectorModel.setOptions({ model: 'short', minDetectionConfidence: 0.65 });
     detectorModel.onResults(payload => {
       currentFrameDetectionsList = payload.detections || [];
     });
-
+    
     detectorModel.initialize().then(() => {
       facialDetectionEngine = detectorModel;
       resolve();
@@ -667,7 +667,7 @@ function killHardwareStream() {
       track.stop();
     });
   }
-
+  
   blockerOverlay.style.display = 'flex';
   btnDisconnect.style.display = 'none';
   btnSnapshot.disabled = true;
@@ -701,9 +701,9 @@ async function canvasExecutionLoop(timestamp) {
 
   if (facialDetectionEngine && timestamp - timestampLastFrameAnalysis > 60) {
     timestampLastFrameAnalysis = timestamp;
-    try {
-       await facialDetectionEngine.send({ image: vid });
-       } catch (e) {}
+    try { 
+      await facialDetectionEngine.send({ image: vid }); 
+    } catch (e) {}
   }
 
   if (currentFrameDetectionsList.length === 1) {
@@ -711,7 +711,7 @@ async function canvasExecutionLoop(timestamp) {
   } else {
     readCount.textContent = currentFrameDetectionsList.length + ' Face Tracks';
   }
-
+  
   if (currentFrameDetectionsList.length > 0) {
     clearStatusAndPaint('busy', 'TRACKING');
   } else {
@@ -719,7 +719,7 @@ async function canvasExecutionLoop(timestamp) {
   }
 
   if (activeFilterId === 'matrix') {
-    computeBinaryMatrix('active', 'READY');
+    computeBinaryMatrixFrame();
   }
 
   currentFrameDetectionsList.forEach(faceStructure => {
@@ -730,7 +730,7 @@ async function canvasExecutionLoop(timestamp) {
 function mapFacialTopologyCoordinates(face) {
   const W = cvs.width, H = cvs.height;
   const boundingBlock = face.boundingBox;
-
+  
   const x = boundingBlock.xCenter * W - (boundingBlock.width * W) / 2;
   const y = boundingBlock.yCenter * H - (boundingBlock.height * H) / 2;
   const w = boundingBlock.width * W;
@@ -740,7 +740,7 @@ function mapFacialTopologyCoordinates(face) {
 
   const vectorPoints = {};
   const anatomicalLabels = ['rightEye', 'leftEye', 'noseTip', 'mouth', 'rightEar', 'leftEar'];
-
+  
   if (face.landmarks) {
     face.landmarks.forEach((landmark, idx) => {
       vectorPoints[anatomicalLabels[idx]] = { x: landmark.x * W, y: landmark.y * H };
@@ -800,7 +800,7 @@ function drawGlassesOverlay(m) {
   ctx.rotate(transformAngleRad);
 
   const scalarDistance = Math.abs(rightEyeX - leftEyeX);
-
+  
   ctx.fillStyle = `rgba(15, 23, 42, ${scalarAlphaIntensity * 0.95})`;
   ctx.strokeStyle = 'var(--brand-primary)';
   ctx.lineWidth = Math.max(3, w * 0.015);
@@ -831,7 +831,7 @@ function drawBunnyOverlay(m) {
   ctx.rotate(transformAngleRad);
 
   ctx.fillStyle = `rgba(241, 245, 249, ${scalarAlphaIntensity})`;
-  ctx.strokeStyle = '#cbd5e1' ;
+  ctx.strokeStyle = '#cbd5e1';
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -846,11 +846,11 @@ function drawBunnyOverlay(m) {
 
   ctx.fillStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity * 0.5})`;
   ctx.beginPath();
-  ctx.ellipse(-baseSpacing, -earH * 0.45, earW * 0.3, -0.05, 0, Math.PI * 2);
+  ctx.ellipse(-baseSpacing, -earH * 0.45, earW * 0.3, earH * 0.35, -0.05, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.beginPath();
-  ctx.ellipse(baseSpacing, -earH * 0.45, earW * 0.3, earH * 0.35, 0.05, 0, Math.PI *2);
+  ctx.ellipse(baseSpacing, -earH * 0.45, earW * 0.3, earH * 0.35, 0.05, 0, Math.PI * 2);
   ctx.fill();
 }
 
@@ -864,19 +864,19 @@ function drawDevilOverlay(m) {
   ctx.rotate(transformAngleRad);
 
   ctx.fillStyle = `rgba(239, 64, 64, ${scalarAlphaIntensity})`;
-  ctx.strokeStyle = '#991b1b' ;
+  ctx.strokeStyle = '#991b1b';
   ctx.lineWidth = 2;
 
   ctx.beginPath();
   ctx.moveTo(-hornSeparation - hornW / 2, 0);
+  ctx.quadraticCurveTo(-hornSeparation - hornW, -hornH * 0.6, -hornSeparation - hornW * 0.4, -hornH);
   ctx.quadraticCurveTo(-hornSeparation, -hornH * 0.5, -hornSeparation + hornW / 2, 0);
-  ctx.quadraticCurveTo(-hornSeparation, -hornH * 0.5, -hornSeparation + hornW / 2,0);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(hornSeparation + hornW / 2, 0);
+  ctx.moveTo(hornSeparation - hornW / 2, 0);
   ctx.quadraticCurveTo(hornSeparation + hornW, -hornH * 0.6, hornSeparation + hornW * 0.4, -hornH);
   ctx.quadraticCurveTo(hornSeparation, -hornH * 0.5, hornSeparation + hornW / 2, 0);
   ctx.closePath();
@@ -903,14 +903,14 @@ function drawCrownOverlay(m) {
   ctx.closePath();
 
   ctx.fillStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity})`;
-  ctx.strokeStyle = '#0284c7' ;
+  ctx.strokeStyle = '#0284c7';
   ctx.lineWidth = 2;
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = '#f8fafc' ;
+  ctx.fillStyle = '#f8fafc';
   ctx.beginPath(); ctx.arc(-totalCrownWidth / 2, -totalCrownHeight * 0.5, w * 0.025, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(totalCrownWidth / 2, -totalCrownWidth * 0.5, w * 0.025, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(totalCrownWidth / 2, -totalCrownHeight * 0.5, w * 0.025, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(0, -totalCrownHeight, w * 0.03, 0, Math.PI * 2); ctx.fill();
 }
 
@@ -923,7 +923,7 @@ function drawTopHatOverlay(m) {
 
   ctx.translate(cx, y + h * 0.05);
   ctx.rotate(transformAngleRad);
-  
+
   ctx.fillStyle = `rgba(30, 41, 59, ${scalarAlphaIntensity})`;
   ctx.fillRect(-coreHatWidth / 2, -totalHatHeight, coreHatWidth, totalHatHeight);
 
@@ -936,12 +936,12 @@ function drawTopHatOverlay(m) {
 
 function drawClownOverlay(m) {
   const { cx, y, w, h, transformAngleRad, vectorPoints } = m;
-
+  
   ctx.translate(cx, y + h / 2);
   ctx.rotate(transformAngleRad);
-
+  
   const transformToLocalSpace = (targetKeyPoint) => {
-    if (!targetKeyPoint) return { x: 0, y: 0};
+    if (!targetKeyPoint) return { x: 0, y: 0 };
     return {
       x: targetKeyPoint.x - cx,
       y: targetKeyPoint.y - (y + h / 2)
@@ -954,7 +954,7 @@ function drawClownOverlay(m) {
 
   ctx.fillStyle = 'var(--brand-primary)';
   ctx.globalAlpha = scalarAlphaIntensity;
-
+  
   ctx.beginPath();
   ctx.arc(targetLeftEyeLocal.x || -w * 0.2, (targetLeftEyeLocal.y || -h * 0.1) - 5, w * 0.06, 0, Math.PI * 2);
   ctx.fill();
@@ -962,9 +962,9 @@ function drawClownOverlay(m) {
   ctx.beginPath();
   ctx.arc(targetRightEyeLocal.x || w * 0.2, (targetRightEyeLocal.y || -h * 0.1) - 5, w * 0.06, 0, Math.PI * 2);
   ctx.fill();
-
+  
   ctx.globalAlpha = 1.0;
-  ctx.fillStyle = '#ef4444' ;
+  ctx.fillStyle = '#ef4444';
   ctx.beginPath();
   ctx.arc(computedNoseLocal.x, computedNoseLocal.y, w * 0.09, 0, Math.PI * 2);
   ctx.fill();
@@ -993,26 +993,26 @@ function drawHaloOverlay(m) {
   ctx.lineWidth = Math.max(4, w * 0.016);
   ctx.shadowBlur = 15;
   ctx.shadowColor = 'var(--brand-primary)';
-
+  
   ctx.beginPath();
   ctx.ellipse(0, 0, trackingRadiusW, trackingRadiusH, 0, 0, Math.PI * 2);
   ctx.stroke();
-
+  
   ctx.shadowBlur = 0;
 }
 
 function drawRainbowOverlay(m) {
   const { cx, y, w, h } = m;
   const dynamicThickness = Math.max(4, w * 0.03);
-  const colorHexArray = ['#38bbdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#1e3a8a'];
+  const colorHexArray = ['#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#1e3a8a'];
 
   ctx.save();
   ctx.globalAlpha = scalarAlphaIntensity * 0.8;
-  colorHexArray.forEach((hex, metricIndx) => {
+  colorHexArray.forEach((hex, metricIndex) => {
     ctx.strokeStyle = hex;
     ctx.lineWidth = dynamicThickness;
     ctx.beginPath();
-    ctx.arc(cx, y + h * 0.5, (w * 0.6) - (metricIndx * dynamicThickness), Math.PI, 0, false);
+    ctx.arc(cx, y + h * 0.5, (w * 0.6) - (metricIndex * dynamicThickness), Math.PI, 0, false);
     ctx.stroke();
   });
   ctx.restore();
@@ -1023,10 +1023,10 @@ function drawCyberHUDOverlay(m) {
   ctx.strokeStyle = 'var(--brand-primary)';
   ctx.lineWidth = 1.5;
   ctx.globalAlpha = scalarAlphaIntensity;
-
+  
   ctx.strokeRect(x, y, w, h);
   ctx.beginPath();
-  ctx.moveTo(cx, cy - 20); ctx.lineTo(cx, cy + 20);
+  ctx.moveTo(cx - 20, cy); ctx.lineTo(cx + 20, cy);
   ctx.moveTo(cx, cy - 20); ctx.lineTo(cx, cy + 20);
   ctx.stroke();
 
@@ -1041,11 +1041,11 @@ function drawPixelationOverlay(m) {
   const structuralY = Math.max(0, Math.floor(y));
   const spatialW = Math.min(cvs.width - structuralX, Math.floor(w));
   const spatialH = Math.min(cvs.height - structuralY, Math.floor(h));
-
+  
   if (spatialW <= 0 || spatialH <= 0) return;
 
   const executionCanvasBuffer = document.createElement('canvas');
-  executionCanvasBuffer.width = cvs.width;
+  executionCanvasBuffer.width = cvs.width; 
   executionCanvasBuffer.height = cvs.height;
   executionCanvasBuffer.getContext('2d').drawImage(vid, 0, 0, cvs.width, cvs.height);
 
@@ -1056,9 +1056,9 @@ function drawPixelationOverlay(m) {
     for (let innerX = 0; innerX < spatialW; innerX += processingGridSize) {
       const calculatedByteIndex = (innerY * spatialW + innerX) * 4;
       const r = frameworkBytesDataset.data[calculatedByteIndex];
-      const g = frameworkBytesDataset.data[calculatedByteIndex];
-      const b = frameworkBytesDataset.data[calculatedByteIndex];
-
+      const g = frameworkBytesDataset.data[calculatedByteIndex + 1];
+      const b = frameworkBytesDataset.data[calculatedByteIndex + 2];
+      
       ctx.fillStyle = `rgb(${r},${g},${b})`;
       ctx.fillRect(structuralX + innerX, structuralY + innerY, processingGridSize, processingGridSize);
     }
@@ -1071,36 +1071,36 @@ function drawGlitchOverlay(m) {
   ctx.globalAlpha = scalarAlphaIntensity * 0.6;
   ctx.fillStyle = 'var(--brand-primary)';
   ctx.fillRect(x + (Math.random() * 16 - 8), y, w, h);
-  ctx.fillStyle = '#0284c7' ;
+  ctx.fillStyle = '#0284c7';
   ctx.fillRect(x + (Math.random() * 16 - 8), y, w, h);
   ctx.restore();
 }
 
 function generateBinaryMatrixDataPoints() {
-  binaryColumnHeightArray = [];
+  binaryColumnHeightsArray = [];
   const calculatedColumnsTotal = Math.floor(1280 / 16);
-  for (let columnIdx =0; columnIdx < calculatedColumnsTotal; columnIdx++) {
-    binaryColumnHeightArray.push(Math.random() * 720);
+  for (let columnIdx = 0; columnIdx < calculatedColumnsTotal; columnIdx++) {
+    binaryColumnHeightsArray.push(Math.random() * 720);
   }
 }
 
 function computeBinaryMatrixFrame() {
   ctx.fillStyle = 'rgba(15, 23, 42, 0.2)';
   ctx.fillRect(0, 0, cvs.width, cvs.height);
-
+  
   ctx.fillStyle = `rgba(56, 189, 248, ${scalarAlphaIntensity})`;
   ctx.font = "600 12px 'JetBrains Mono'";
-
-  const systemWesternCharSet = '01100101010111001' .split('');
-
-  binaryColumnHeightArray.forEach((yTrackPosition, currentColumnIndex) => {
+  
+  const systemWesternCharSet = '01100101010111001'.split('');
+  
+  binaryColumnHeightsArray.forEach((yTrackPosition, currentColumnIndex) => {
     const alphanumericCharacter = systemWesternCharSet[Math.floor(Math.random() * systemWesternCharSet.length)];
     ctx.fillText(alphanumericCharacter, currentColumnIndex * 16, yTrackPosition);
-
+    
     if (yTrackPosition > cvs.height && Math.random() > 0.975) {
-      binaryColumnHeightArray[currentColumnIndex] = 0;
+      binaryColumnHeightsArray[currentColumnIndex] = 0;
     } else {
-      binaryColumnHeightArray[currentColumnIndex] = yTrackPosition + 16;
+      binaryColumnHeightsArray[currentColumnIndex] = yTrackPosition + 16;
     }
   });
 }
@@ -1136,7 +1136,7 @@ function executeStudioSnapshot() {
 
   const automaticFileAnchor = document.createElement('a');
   automaticFileAnchor.download = `Selfie_${Date.now()}.png`;
-  automaticFileAnchor.href = finalCanvasBuffer.toDateURL('image/png');
+  automaticFileAnchor.href = finalCanvasBuffer.toDataURL('image/png');
   automaticFileAnchor.click();
 }
 </script>
