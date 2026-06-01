@@ -29,6 +29,10 @@ Ai Use - I have use ai to generate the thumbnail of the youtube video only .
 
 ---
 
+### My Selfie is an web based filter application which is use to take picture from the web cam and later we can download it as an Png image and use it ..
+
+---
+
 ## Inspo:
 
 For this Project I take my referance like good filter application like instagram , snapchat , etc . Where we can use the fiter on our face and take good picture .
