@@ -92,7 +92,7 @@ I want to build something on top of this filter app so I make it from scrtch and
 
 
 ---
-## Coding laps ( Full Screen Recording of the coding )
+## Coding lapse ( Full Screen Recording of the Coding )
 
 * [Part - 1 Lapse ](https://lapse.hackclub.com/timelapse/Zjb83w7PXzhP)
 * [Part - 2 Lapse ](https://lapse.hackclub.com/timelapse/W7z6WfCJmLOl)
