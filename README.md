@@ -92,6 +92,21 @@ I want to build something on top of this filter app so I make it from scrtch and
 
 
 ---
+## Coding laps ( Full Screen Recording of the coding )
+
+* [Part - 1 Lapse ](https://lapse.hackclub.com/timelapse/Zjb83w7PXzhP)
+* [Part - 2 Lapse ](https://lapse.hackclub.com/timelapse/W7z6WfCJmLOl)
+* [Part - 3 Lapse ](https://lapse.hackclub.com/timelapse/ua4rmVTWnpaU)
+* [Part - 4 Lapse ](https://lapse.hackclub.com/timelapse/htEQLufHbwUg)
+* [Part - 5 Lapse ](https://lapse.hackclub.com/timelapse/Q6NGzMT4HKL9)
+* [Part - 6 Lapse ](https://lapse.hackclub.com/timelapse/EIH3tKwiX3ZH)
+* [Part - 7 Lapse ](https://lapse.hackclub.com/timelapse/WpFHzY6VPIix)
+* [Part - 8 Lapse ](https://lapse.hackclub.com/timelapse/P8oVUhu9Jl6_)
+* [Part - 9 Lapse ](https://lapse.hackclub.com/timelapse/iw0CMnUjP8sC)
+* [Part - 10 Lapse ](https://lapse.hackclub.com/timelapse/fYAesrDqALbZ)
+* [Part -11 Lapse ](https://lapse.hackclub.com/timelapse/tmLQ1r7hqw0g)
+
+---
 
 ### For contributing to this project, first for the repo and add additional changes to make the website more good can you make a pull request I Will surely check that and merge it.
 
