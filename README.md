@@ -67,6 +67,11 @@ I want to build something on top of this filter app so I make it from scrtch and
 * 4) Write - open index.html (Mac) , start index.html (Windows) , xdg-open index.html (Linux) 
 
 ---
+## Wire Frame 
+
+<img width="1293" height="546" alt="Screenshot 2026-06-03 at 5 34 38 PM" src="https://github.com/user-attachments/assets/0c7f665a-e32f-48d5-994b-e2b9e9791578" />
+
+---
 
 ## Project Screenshot
 
