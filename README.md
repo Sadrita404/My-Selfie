@@ -15,16 +15,6 @@
   <img src="https://github.com/user-attachments/assets/941e4dc3-3263-48fa-bc80-5807a56a0c52" alt="Watch the video" width="50%">
 </a>
 
-
----
-### YouTube Timelaps of 12hrs of Coding Fast Forward ( Click On the Image below to see the Demo Video ↓)
-
-<a href="https://youtu.be/JQruk1_zLDY">
-  <img src="https://github.com/user-attachments/assets/34f5d9cf-ee76-4c70-8457-4adcd9a2c629" alt="Watch the video" width="50%">
-</a>
-
----
-
 Ai Use - I have use ai to generate the thumbnail of the youtube video only .
 
 ---
